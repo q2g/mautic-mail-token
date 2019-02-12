@@ -1,0 +1,1 @@
+# mautic-mail-token
