@@ -7,6 +7,7 @@ use Mautic\EmailBundle\EmailEvents;
 use Mautic\EmailBundle\Event\EmailBuilderEvent;
 use Mautic\EmailBundle\Event\EmailSendEvent;
 
+
 function GUIDv4 ($trim = true) {
     // Windows
     if (function_exists('com_create_guid') === true) {
@@ -54,23 +55,18 @@ class EmailSubscriber extends CommonSubscriber {
      * @param EmailBuilderEvent $event
      */
     public function onEmailBuild(EmailBuilderEvent $event) {
+        $tokens = array(
+            '{ser-token}' => 'SER Token',
+        );
+
         // Add email tokens
         $event->addTokenSection('addTokenToEmail.token', 'plugin.addTokenToEmail.header', '{token}');
-
-        // Add AB Test Winner Criteria
-        // $event->addAbTestWinnerCriteria(
-        //     'helloworld.planetvisits',
-        //     array(
-        //         // Label to group by
-        //         'group'    => 'plugin.addTokenToEmail.header',
-
-        //         // Label for this specific a/b test winning criteria
-        //         'label'    => 'plugin.addTokenToEmail.emailtokens.',
-
-        //         // Static callback function that will be used to determine the winner
-        //         'callback' => '\MauticPlugin\AddTokenToEmailBundle\Helper\AbTestHelper::determinePlanetVisitWinner'
-        //     )
-        // );
+        if ($event->tokensRequested(array_keys($tokens))) {
+            $event->addTokens(
+                $event->filterTokens($tokens),
+                true
+            );
+        };
     }
 
     /**
@@ -79,11 +75,15 @@ class EmailSubscriber extends CommonSubscriber {
      * @param EmailSendEvent $event
      */
     public function onEmailGenerate(EmailSendEvent $event) {
+
+        $tokens = array(
+            '{ser-token}' => 'SER Token',
+        );
         // Get content
         $content = $event->getContent();
 
         // Search and replace tokens
-        $content = str_replace('{token}', getToken('test'), $content);
+        $content = str_replace(array_keys($tokens)[0], getToken('test'), $content);
 
         // Set updated content
         $event->setContent($content);
