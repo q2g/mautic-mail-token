@@ -26,9 +26,8 @@ function GUIDv4 ($trim = true) {
 }
 
 
-
 // generate a random token
-function genGuid($string) {
+function getToken($string) {
     $guid = GUIDv4();
     return "$guid$string";
 }
@@ -36,14 +35,12 @@ function genGuid($string) {
 /**
  * Class EmailSubscriber
  */
-class EmailSubscriber extends CommonSubscriber
-{
+class EmailSubscriber extends CommonSubscriber {
 
     /**
      * @return array
      */
-    static public function getSubscribedEvents()
-    {
+    static public function getSubscribedEvents() {
         return array(
             EmailEvents::EMAIL_ON_BUILD   => array('onEmailBuild', 0),
             EmailEvents::EMAIL_ON_SEND    => array('onEmailGenerate', 0),
@@ -56,25 +53,24 @@ class EmailSubscriber extends CommonSubscriber
      *
      * @param EmailBuilderEvent $event
      */
-    public function onEmailBuild(EmailBuilderEvent $event)
-    {
+    public function onEmailBuild(EmailBuilderEvent $event) {
         // Add email tokens
         $event->addTokenSection('addTokenToEmail.token', 'plugin.addTokenToEmail.header', '{token}');
 
         // Add AB Test Winner Criteria
-        $event->addAbTestWinnerCriteria(
-            'helloworld.planetvisits',
-            array(
-                // Label to group by
-                'group'    => 'plugin.addTokenToEmail.header',
+        // $event->addAbTestWinnerCriteria(
+        //     'helloworld.planetvisits',
+        //     array(
+        //         // Label to group by
+        //         'group'    => 'plugin.addTokenToEmail.header',
 
-                // Label for this specific a/b test winning criteria
-                'label'    => 'plugin.addTokenToEmail.emailtokens.',
+        //         // Label for this specific a/b test winning criteria
+        //         'label'    => 'plugin.addTokenToEmail.emailtokens.',
 
-                // Static callback function that will be used to determine the winner
-                'callback' => '\MauticPlugin\AddTokenToEmailBundle\Helper\AbTestHelper::determinePlanetVisitWinner'
-            )
-        );
+        //         // Static callback function that will be used to determine the winner
+        //         'callback' => '\MauticPlugin\AddTokenToEmailBundle\Helper\AbTestHelper::determinePlanetVisitWinner'
+        //     )
+        // );
     }
 
     /**
@@ -82,13 +78,12 @@ class EmailSubscriber extends CommonSubscriber
      *
      * @param EmailSendEvent $event
      */
-    public function onEmailGenerate(EmailSendEvent $event)
-    {
+    public function onEmailGenerate(EmailSendEvent $event) {
         // Get content
         $content = $event->getContent();
 
         // Search and replace tokens
-        $content = str_replace('{token}', genGuid('test'), $content);
+        $content = str_replace('{token}', getToken('test'), $content);
 
         // Set updated content
         $event->setContent($content);
