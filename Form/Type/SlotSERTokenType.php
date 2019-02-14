@@ -11,16 +11,16 @@ class SlotSERTokenType extends SlotType {
     * @param FormBuilderInterface $builder
     * @param array                $options
     */
-    public function buildForm(FormBuilderInterface $builder, array $options){
+    public function buildForm(FormBuilderInterface $builder, array $options) {
         
         $builder->add('href', 'text', [
             'label' => 'URL',
             'label_attr' => ['class' => 'control-label'],
-            'required' => false,
+            'required' => true,
             'attr' => [
-                'value' => 'https://testserver/extensions/q2g-web-jwtproxyredirect/q2g-web-jwtproxyredirect.html?bearer=',
+                // 'value' => "https://testserver/extensions/q2g-web-jwtproxyredirect/q2g-web-jwtproxyredirect.html?bearer=",
                 'class' => 'form-control',
-                'data-slot-param' => 'href',
+                'data-slot-param' => 'href'
             ],
             ]
         );
@@ -30,8 +30,7 @@ class SlotSERTokenType extends SlotType {
     /**
     * @return string
     */
-    public function getName()
-    {
+    public function getName() {
         return 'slot_sertoken';
     }
 }
