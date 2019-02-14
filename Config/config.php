@@ -7,17 +7,20 @@ return array(
 
     'services'    => array(
         'events' => array(
-            'mautic.addtokentoemail.emailbundle.subscriber' => array(
+            'plugin.addtokentoemail.emailbundle.subscriber' => array(
                 'class' => 'MauticPlugin\AddTokenToEmailBundle\EventListener\EmailSubscriber'
+            ),
+            'plugin.addtokentoemail.pagebuilder.subscriber' => array(
+                'class' => 'MauticPlugin\AddTokenToEmailBundle\EventListener\SlotSubscriber'
             )
         ),
-        /* 'forms'  => array(
-         *     'mautic.form.type.fieldslist.selectidentifier'  => array(
-         *         'class' => 'MauticPlugin\MauticDeskBundle\Form\Type\FormFieldsType',
-         *         'arguments' => 'mautic.factory',
-         *         'alias' => 'formfields_list'
-         *     )
-         * ) */
+        'forms'  => array(
+            'plugin.addtokentoemail.form.type.slot.sertoken'  => array(
+                'class' => 'MauticPlugin\AddTokenToEmailBundle\Form\Type\SlotSERTokenType',
+                'arguments' => 'mautic.factory',
+                'alias' => 'slot_sertoken'
+            )
+        )
     ),
 );
 
