@@ -30,7 +30,7 @@ class SlotSubscriber extends CommonSubscriber {
     public function onEmailBuild(EmailBuilderEvent $event){
         if ($event->slotTypesRequested()) {
             $event->addSlotType(
-                'sertoken',
+                'token',
                 'SER Token mit Parameter',
                 'key',
                 'AddTokenToEmailBundle:Slots:token.html.php',
