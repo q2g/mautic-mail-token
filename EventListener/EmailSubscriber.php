@@ -10,7 +10,9 @@ use Mautic\EmailBundle\Event\EmailBuilderEvent;
 use Mautic\EmailBundle\Event\EmailSendEvent;
 use Firebase\JWT\JWT;
 
-$privateKey = <<<EOT
+// generate a random token
+function getToken() {
+    $privateKey = <<<EOT
 -----BEGIN RSA PRIVATE KEY-----
 MIIEpAIBAAKCAQEAnsgSAAPEbCP8xb7oxWBDdZ17XUUttJLD0GgN9Wnq3Ub7vVc9
 p1OKrtDALX/OuYzFP4eAVuEVOnvgG7WJZVXYVQcwe95Al+dJX+QRkce52lcpjLpw
@@ -40,16 +42,12 @@ ruQJRxHDRanrzrPY/nZY1ffd0ASjbLD0j2g+TtOpTEIVP4dceAIWobp3SOqSAOxp
 -----END RSA PRIVATE KEY-----
 EOT;
 
-
-// generate a random token
-function getToken() {
-    global $privateKey;
     $token = array(
         'UserId' => 'administrator',
         'UserDirectory' => 'TESTSERVER'
     );
     
-    return JWT::encode($token, $privateKey, 'RS512');
+    return (string)JWT::encode($token, $privateKey, 'RS512');
 }
 
 /**
